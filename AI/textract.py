@@ -43,7 +43,7 @@ def generate_chunks(file, text):
     save_file(file, chunks)
     
 def save_file(file, chunks):
-    name = './results/vault.json'
+    name = 'results/vault.json'
     data = []
     for chunk in chunks:
         data.append({
@@ -51,7 +51,7 @@ def save_file(file, chunks):
             "file": file
         })
     
-    with open(name, 'w', encoding='utf-8') as vault_file:
+    with open(name, 'a', encoding='utf-8') as vault_file:
         json.dump(data, vault_file, ensure_ascii=False)
         vault_file.close()
 

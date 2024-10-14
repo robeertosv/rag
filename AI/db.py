@@ -5,11 +5,15 @@ import json
 
 
 def main():
+    print('Iniciando...')
     path = 'D:/Proyectos/rag/AI/results/vault.json'
+    print('Iniciando 1...')
     chroma_client = chromadb.PersistentClient(path='db/')
+    print('Iniciando 2...')
     sentence_transformer_ef = embedding_functions.SentenceTransformerEmbeddingFunction(model_name="all-mpnet-base-v2")
+    print('Iniciando 3...')
     chroma_collection = chroma_client.get_or_create_collection(name="pdf_docs", embedding_function=sentence_transformer_ef)
-
+    print('Iniciado!')
     data = []
     
     documents = []
