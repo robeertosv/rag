@@ -1,0 +1,6 @@
+.venv
+node_modules
+*.bin
+*.sql*
+__pycache__
+vault.json
