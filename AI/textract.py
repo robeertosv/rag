@@ -2,6 +2,7 @@ import pymupdf
 import os
 import re
 import json
+from bertopic import BERTopic
 
 path = "D:/Proyectos/rag/AI/docs" # As needed
 
@@ -22,7 +23,8 @@ def textract():
             text += page.get_text()
         
         text = re.sub(r'\s+', ' ', text).strip()
-        generate_chunks(file, text)
+        #generate_chunks(file, text)
+        thematic_chunking(file, text)
 
 def generate_chunks(file, text):
     sentences = re.split(r'(?<=[.!?]) +', text)  # split on spaces following sentence-ending punctuation
@@ -39,6 +41,27 @@ def generate_chunks(file, text):
             
     if current_chunk:  # Don't forget the last chunk!
         chunks.append(current_chunk)
+    
+    save_file(file, chunks)
+
+
+def thematic_chunking(file, text):
+    topic_model = BERTopic(language="spanish")
+    topics, _ = topic_model.fit_transform(text.split(". "))
+    chunks = []
+    current_chunk = ""
+    current_topic = topics[0]
+
+    for i, topic in enumerate(topics):
+        # Dividir si cambia el tema
+        if topic != current_topic:
+            chunks.append(current_chunk.strip())
+            current_chunk = ""
+            current_topic = topic
+        current_chunk += " " + text.split(". ")[i]
+    
+    if current_chunk:
+        chunks.append(current_chunk.strip())
     
     save_file(file, chunks)
     
